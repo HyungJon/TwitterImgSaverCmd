@@ -15,7 +15,7 @@ namespace TwitterImgSaverCmd
 
         private static void Main(string[] args)
         {
-            while (true)
+            while (true) 
             {
                 Console.Write("Enter URL: \n> ");
                 string input = Console.ReadLine();

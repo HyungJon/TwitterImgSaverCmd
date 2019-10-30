@@ -12,3 +12,6 @@
 
 # Packages folder
 **/packages/*
+
+# Visual Studio Code directory
+TwitterImgSaverCmd/.vscode/

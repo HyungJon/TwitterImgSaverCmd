@@ -12,17 +12,18 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public class TwitterImage
     {
-        private readonly string _fileLink;
         private readonly string _fileOrigSizeLink;
-        private readonly string _fileName;
         private readonly string _fileNameToSave;
 
-        public TwitterImage(Uri uri)
+        public TwitterImage(Uri uri, string tweetId = null, int? index = null)
         {
-            _fileLink = uri.AbsoluteUri;
-            _fileOrigSizeLink = ConvertImageLinkToOrig(_fileLink);
-            _fileName = _fileOrigSizeLink.Substring(_fileOrigSizeLink.LastIndexOf('/') + 1);
-            _fileNameToSave = DropOrigFromFilename(_fileName);
+            var fileLink = uri.AbsoluteUri;
+            _fileOrigSizeLink = ConvertImageLinkToOrig(fileLink);
+            var fileName = DropOrigFromFilename(_fileOrigSizeLink.Substring(_fileOrigSizeLink.LastIndexOf('/') + 1));
+
+            _fileNameToSave = (tweetId != null)
+                ? $"{tweetId}{ (index.HasValue ? $"_{index.Value}" : string.Empty) }.{ParseExtension(fileName)}"
+                : fileName;
         }
 
         public async Task DownloadAsync(string saveDirectoryPath)
@@ -56,7 +57,7 @@ namespace TwitterImgSaverCmd
         private static string DropOrigFromFilename(string filename)
         {
             filename = filename.Substring(0, filename.LastIndexOf(':'));
-            Console.WriteLine("   Output file name: " + filename);
+            Console.WriteLine("   Image file name: " + filename);
             return filename;
         }
     }

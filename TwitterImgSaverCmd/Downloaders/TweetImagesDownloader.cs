@@ -10,6 +10,8 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public class TweetImagesDownloader : Downloader
     {
+        private string tweetId;
+
         public TweetImagesDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
         {
             Console.WriteLine(" " + _uri + " is a tweet");
@@ -30,13 +32,21 @@ namespace TwitterImgSaverCmd
                                                         .SelectSingleNode("head")
                                                         .SelectNodes("//meta[@property='og:image']");
 
+                var urlMetadata = htmlDoc.DocumentNode.SelectSingleNode("html")
+                                                        .SelectSingleNode("head")
+                                                        .SelectSingleNode("//meta[@property='og:url']");
+                var url = urlMetadata.Attributes["content"].Value;
+                tweetId = url.Substring(url.LastIndexOf('/') + 1);
+                Console.WriteLine("  Tweeter ID: " + tweetId);
+
                 // does this need error handling?
-                foreach (var metadata in imageMetadata)
+                for (var i = 0; i < imageMetadata.Count; i++)
                 {
+                    var metadata = imageMetadata[i];
                     string imgLink = metadata.Attributes["content"].Value;
                     Console.WriteLine("  Obtained the image link " + imgLink);
 
-                    ImagesList.Add(new TwitterImage(new Uri(imgLink)));
+                    ImagesList.Add(new TwitterImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i : (int?)null));
                 }
             }
         }
