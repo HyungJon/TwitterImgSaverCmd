@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace TwitterImgSaverCmd
 {
@@ -7,10 +8,6 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public class Program
     {
-        private const string MSG_ERROR_INVALID_URL = "ERROR: not valid URL";
-        private const string MSG_ERROR_UNSUPPORTED_DOMAIN = " ERROR: not a supported domain";
-
-        // later make this configurable, in full version with UI
         private static string SaveDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
         private static void Main(string[] args)
@@ -19,31 +16,60 @@ namespace TwitterImgSaverCmd
             {
                 Console.Write("Enter URL: \n> ");
                 string input = Console.ReadLine();
-                if (input == string.Empty) break;
+                if (input.Trim(' ') == string.Empty) break;
 
-                ProcessInput(input);
+                try
+                {
+                    ProcessInput(input);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(" Error: " + ex.Message);
+                }
             }
         }
 
         private static void ProcessInput(string input)
         {
-            if (!Uri.TryCreate(input, UriKind.Absolute, out Uri uri))
+            var command = CommandParser.ParseCommand(input);
+
+            switch (command.Type)
             {
-                Console.WriteLine(" " + MSG_ERROR_INVALID_URL);
-                return;
+                case CommandType.ChangeDir:
+                    {
+                        try
+                        {
+                            SaveDirectoryPath = Path.GetFullPath(command.Parameter);
+                            Console.WriteLine(" Save folder changed to " + SaveDirectoryPath);
+                        }
+                        catch (Exception)
+                        {
+                            throw new Exception("Invalid save folder");
+                        }
+                    }
+                    break;
+                case CommandType.Download:
+                    {
+                        if (!Uri.TryCreate(command.Parameter, UriKind.Absolute, out Uri uri))
+                        {
+                            throw new Exception("URL not valid");
+                        }
+
+                        IDownloader downloader = DownloadFactory.GetDownloader(uri, SaveDirectoryPath);
+
+                        if (downloader == null)
+                        {
+                            throw new Exception("Domain not supported");
+                        }
+
+                        downloader.PrepareDownloadSources();
+                        downloader.Download();
+                        // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
+                    }
+                    break;
+                default:
+                    throw new Exception("Command not supported");
             }
-
-            IDownloader downloader = DownloadFactory.GetDownloader(uri, SaveDirectoryPath);
-
-            if (downloader == null)
-            {
-                Console.WriteLine(" " + MSG_ERROR_UNSUPPORTED_DOMAIN);
-                return;
-            }
-
-            downloader.PrepareDownloadSources();
-            downloader.Download();
-            // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
         }
     }
 }
