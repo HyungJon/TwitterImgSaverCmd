@@ -48,8 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
+    <Compile Include="Commands\ChdirCommand.cs" />
+    <Compile Include="Commands\Command.cs" />
     <Compile Include="CommandParser.cs" />
+    <Compile Include="Commands\DownloadCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Downloaders\Downloader.cs" />
     <Compile Include="Downloaders\IDownloader.cs" />
     <Compile Include="Downloaders\ImageDownloader.cs" />

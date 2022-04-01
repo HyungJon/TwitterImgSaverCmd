@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TwitterImgSaverCmd.Commands;
 
 namespace TwitterImgSaverCmd
 {
@@ -18,18 +19,18 @@ namespace TwitterImgSaverCmd
             var parameters = input.Split(' ');
 
             if (parameters.Length == 1)
-                return new Command(CommandType.Download, input);
+                return new DownloadCommand(input);
             else if (parameters.Length > 2)
                 throw new Exception("Could not parse input: unexpected number of parameters");
 
             var cmdType = parameters[0].Trim();
             if (cmdType == "chdir")
             {
-                return new Command(CommandType.ChangeDir, parameters[1].Trim());
+                return new ChdirCommand(parameters[1].Trim());
             }
             else if (cmdType == "download" || cmdType == "")
             {
-                return new Command(CommandType.Download, parameters[1].Trim());
+                return new DownloadCommand(parameters[1].Trim());
             }
             else
             {
