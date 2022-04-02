@@ -30,6 +30,7 @@ namespace TwitterImgSaverCmd.Commands
 
             downloader.PrepareDownloadSources();
             downloader.Download();
+            // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
         }
     }
 }

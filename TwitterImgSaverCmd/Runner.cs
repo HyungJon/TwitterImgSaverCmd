@@ -40,46 +40,7 @@ namespace TwitterImgSaverCmd
         {
             var command = CommandParser.ParseCommand(input, _configs);
 
-            // command.Perform();
-
-            // Remove below code when how to keep track of the directory path as configs is figured out
-            switch (command.Type)
-            {
-                case CommandType.ChangeDir:
-                    {
-                        try
-                        {
-                            _configs.SaveDirectoryPath = Path.GetFullPath(command.Parameter);
-                            Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
-                        }
-                        catch (Exception)
-                        {
-                            throw new Exception("Invalid save folder");
-                        }
-                    }
-                    break;
-                case CommandType.Download:
-                    {
-                        if (!Uri.TryCreate(command.Parameter, UriKind.Absolute, out Uri uri))
-                        {
-                            throw new Exception("URL not valid");
-                        }
-
-                        IDownloader downloader = DownloadFactory.GetDownloader(uri, _configs.SaveDirectoryPath);
-
-                        if (downloader == null)
-                        {
-                            throw new Exception("Domain not supported");
-                        }
-
-                        downloader.PrepareDownloadSources();
-                        downloader.Download();
-                        // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
-                    }
-                    break;
-                default:
-                    throw new Exception("Command not supported");
-            }
+            command.Perform();
         }
     }
 }

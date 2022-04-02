@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,15 @@ namespace TwitterImgSaverCmd.Commands
 
         public override void Perform()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _configs.SaveDirectoryPath = Path.GetFullPath(Parameter);
+                Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Invalid save folder");
+            }
         }
     }
 }
