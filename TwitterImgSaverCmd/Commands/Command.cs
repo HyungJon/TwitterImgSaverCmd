@@ -12,15 +12,11 @@ namespace TwitterImgSaverCmd.Commands
         protected readonly CommandType _type;
         public CommandType Type => _type;
 
-        protected readonly string _parameter;
-        public string Parameter => _parameter;
-
         protected readonly IConfiguration _configs;
 
-        public Command(CommandType type, string parameter, IConfiguration configs)
+        public Command(CommandType type, IConfiguration configs)
         {
             _type = type;
-            _parameter = parameter;
             _configs = configs;
         }
 

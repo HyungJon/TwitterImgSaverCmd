@@ -15,28 +15,48 @@ namespace TwitterImgSaverCmd
 
     public static class CommandParser
     {
-        public static Command ParseCommand(string input, IConfiguration configs)
+        public static ICommand ParseCommand(string input, IConfiguration configs)
         {
             var parameters = input.Split(' ');
 
-            if (parameters.Length == 1)
+            // handle some special cases
+            if (DetectSingleAddressCase(parameters))
                 return new DownloadCommand(input, configs);
-            else if (parameters.Length > 2)
-                throw new Exception("Could not parse input: unexpected number of parameters");
 
-            var cmdType = parameters[0].Trim();
-            if (cmdType == "chdir")
-            {
+            if (DetectChdirCase(parameters))
                 return new ChdirCommand(parameters[1].Trim(), configs);
-            }
-            else if (cmdType == "download" || cmdType == "")
+
+            var downloadersCandidate = HandleDownloadWithCommandCase(parameters, configs);
+            if (downloadersCandidate != null) return downloadersCandidate;
+
+
+
+
+            throw new InvalidOperationException("Could not parse input: unrecognized command");
+        }
+
+        private static bool DetectSingleAddressCase(string[] parameters)
+        {
+            // return parameters.Length == 1 && Uri.TryCreate(parameters[0], UriKind.Absolute, out Uri _);
+            return parameters.Length == 1; // for now, no other use case where just one parameter is supplied
+        }
+
+        private static bool DetectChdirCase(string[] parameters)
+        {
+            return parameters.Length == 2 && parameters[0] == "chdir";
+        }
+
+        private static ICommand HandleDownloadWithCommandCase(string[] parameters, IConfiguration configs)
+        {
+            if (parameters[0] == "download")
             {
-                return new DownloadCommand(parameters[1].Trim(), configs);
+                if (parameters.Length == 2)
+                    return new DownloadCommand(parameters[1].Trim(), configs);
+                else
+                    return new AggregateCommand(parameters.Skip(1).Select(p => new DownloadCommand(p, configs)), configs);
             }
-            else
-            {
-                throw new Exception("Could not parse input: unrecognized command");
-            }
+
+            return null;
         }
     }
 }

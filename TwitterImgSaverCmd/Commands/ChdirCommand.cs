@@ -10,13 +10,18 @@ namespace TwitterImgSaverCmd.Commands
 {
     public class ChdirCommand : Command
     {
-        public ChdirCommand(string parameter, IConfiguration configs) : base(CommandType.ChangeDir, parameter, configs) { }
+        private readonly string _newDir;
+
+        public ChdirCommand(string newDir, IConfiguration configs) : base(CommandType.ChangeDir, configs)
+        {
+            _newDir = newDir;
+        }
 
         public override void Perform()
         {
             try
             {
-                _configs.SaveDirectoryPath = Path.GetFullPath(Parameter);
+                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
                 Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
             }
             catch (Exception)

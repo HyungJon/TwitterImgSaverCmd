@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TwitterImgSaverCmd.Configurations;
+using TwitterImgSaverCmd.Commands;
 
 namespace TwitterImgSaverCmd
 {
@@ -27,7 +28,9 @@ namespace TwitterImgSaverCmd
 
                 try
                 {
-                    ProcessInput(input);
+                    var command = ProcessInput(input);
+
+                    command.Perform();
                 }
                 catch (Exception ex)
                 {
@@ -36,11 +39,11 @@ namespace TwitterImgSaverCmd
             }
         }
 
-        private void ProcessInput(string input)
+        private ICommand ProcessInput(string input)
         {
             var command = CommandParser.ParseCommand(input, _configs);
 
-            command.Perform();
+            return command;
         }
     }
 }

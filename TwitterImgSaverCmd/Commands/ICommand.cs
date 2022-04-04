@@ -9,7 +9,6 @@ namespace TwitterImgSaverCmd.Commands
     public interface ICommand
     {
         CommandType Type { get; }
-        string Parameter { get; }
         void Perform();
     }
 }
