@@ -17,7 +17,11 @@ namespace TwitterImgSaverCmd
     {
         public static ICommand ParseCommand(string input, IConfiguration configs)
         {
-            var parameters = input.Split(' ');
+            var parameters = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // below logic could be improved
+            // but I also want to avoid having to check the first element multiple times
+            // once to check if it specified command, second if true to check the type of command
 
             // handle some special cases
             if (DetectSingleAddressCase(parameters))
@@ -29,10 +33,25 @@ namespace TwitterImgSaverCmd
             var downloadersCandidate = HandleDownloadWithCommandCase(parameters, configs);
             if (downloadersCandidate != null) return downloadersCandidate;
 
-
-
+            // barring further complications in logic, anything beyond this can be treated as request to download from all given parameters
+            downloadersCandidate = HandleMultipleDownloadsWithoutCommandCase(parameters, configs);
+            if (downloadersCandidate != null) return downloadersCandidate;
 
             throw new InvalidOperationException("Could not parse input: unrecognized command");
+        }
+
+        private static (CommandType, IList<string>) GetCommandTypeAndParams(string[] parameters)
+        {
+            // may need update to below logic
+            switch (parameters[0])
+            {
+                case "chdir":
+                    return (CommandType.ChangeDir, parameters.Skip(1).ToList());
+                case "download":
+                    return (CommandType.Download, parameters.Skip(1).ToList());
+                default:
+                    return (CommandType.ChangeDir, parameters.ToList());
+            }
         }
 
         private static bool DetectSingleAddressCase(string[] parameters)
@@ -58,5 +77,8 @@ namespace TwitterImgSaverCmd
 
             return null;
         }
+
+        private static ICommand HandleMultipleDownloadsWithoutCommandCase(string[] parameters, IConfiguration configs)
+            => new AggregateCommand(parameters.Select(p => new DownloadCommand(p, configs)), configs);
     }
 }

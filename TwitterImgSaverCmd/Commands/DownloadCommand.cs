@@ -11,7 +11,7 @@ namespace TwitterImgSaverCmd.Commands
     {
         private readonly string _address;
 
-        public DownloadCommand(string address, IConfiguration configs) : base(CommandType.Download, configs) // Can this use a type constraint instead?
+        public DownloadCommand(string address, IConfiguration configs) : base(configs)
         {
             _address = address;
         }

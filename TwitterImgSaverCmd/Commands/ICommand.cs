@@ -8,7 +8,6 @@ namespace TwitterImgSaverCmd.Commands
 {
     public interface ICommand
     {
-        CommandType Type { get; }
         void Perform();
     }
 }

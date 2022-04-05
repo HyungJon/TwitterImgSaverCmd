@@ -12,7 +12,7 @@ namespace TwitterImgSaverCmd.Commands
     {
         private readonly string _newDir;
 
-        public ChdirCommand(string newDir, IConfiguration configs) : base(CommandType.ChangeDir, configs)
+        public ChdirCommand(string newDir, IConfiguration configs) : base(configs)
         {
             _newDir = newDir;
         }

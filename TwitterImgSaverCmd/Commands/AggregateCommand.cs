@@ -15,7 +15,7 @@ namespace TwitterImgSaverCmd.Commands
     {
         private readonly IEnumerable<ICommand> _commands;
 
-        public AggregateCommand(IEnumerable<ICommand> commands, IConfiguration configs) : base(CommandType.Download, configs)
+        public AggregateCommand(IEnumerable<ICommand> commands, IConfiguration configs) : base(configs)
         {
             _commands = commands;
         }

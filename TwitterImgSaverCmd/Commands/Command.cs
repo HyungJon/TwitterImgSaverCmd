@@ -9,14 +9,10 @@ namespace TwitterImgSaverCmd.Commands
 {
     public abstract class Command : ICommand
     {
-        protected readonly CommandType _type;
-        public CommandType Type => _type;
-
         protected readonly IConfiguration _configs;
 
-        public Command(CommandType type, IConfiguration configs)
+        public Command(IConfiguration configs)
         {
-            _type = type;
             _configs = configs;
         }
 

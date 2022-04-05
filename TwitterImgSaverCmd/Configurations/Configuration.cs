@@ -11,5 +11,8 @@ namespace TwitterImgSaverCmd.Configurations
     {
         // Find a way to save this to an external .cfg file, for persistence
         public string SaveDirectoryPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
+        // TODO: Is there a way to avoid having to pass the configs everywhere, even where it's never needed?
+        // Probably by implementing a static ConfigManager class
     }
 }
