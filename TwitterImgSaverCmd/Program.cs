@@ -11,9 +11,19 @@ namespace TwitterImgSaverCmd
         private static void Main(string[] args)
         {
             var configs = new Configuration();
-            var runner = new Runner(configs);
 
-            runner.Run();
+            try
+            {
+                configs.LoadConfigs();
+
+                var runner = new Runner(configs);
+
+                runner.Run();
+            }
+            finally
+            {
+                configs.SaveConfigs();
+            }
         }
     }
 }

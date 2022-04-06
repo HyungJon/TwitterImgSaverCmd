@@ -12,6 +12,17 @@ namespace TwitterImgSaverCmd.Configurations
         // and creating a ConfigurationManager class to manage the configs
         // It could be a static class
 
+        /// <summary>
+        /// Load configs from file
+        /// </summary>
+        void LoadConfigs();
+
+        /// <summary>
+        /// Save current configs to file
+        /// </summary>
+        void SaveConfigs();
+
         string SaveDirectoryPath { get; set; }
+        // TODO: look into making this multiple paths
     }
 }
