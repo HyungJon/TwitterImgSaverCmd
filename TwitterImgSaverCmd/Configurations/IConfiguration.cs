@@ -23,6 +23,6 @@ namespace TwitterImgSaverCmd.Configurations
         void SaveConfigs();
 
         string SaveDirectoryPath { get; set; }
-        // TODO: look into making this multiple paths
+        // TODO: look into supporting multiple paths
     }
 }
