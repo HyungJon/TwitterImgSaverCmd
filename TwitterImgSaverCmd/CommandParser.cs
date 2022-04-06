@@ -24,7 +24,7 @@ namespace TwitterImgSaverCmd
             switch (commandType)
             {
                 case null:
-                    return new AggregateCommand(parameters.Select(p => new DownloadCommand(p, configs)), configs);
+                    return ParseNonExplicitInput(parameters, configs);
                 case CommandType.ChangeDir:
                     if (parameters.Count > 2)
                         throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
@@ -52,6 +52,11 @@ namespace TwitterImgSaverCmd
                 default:
                     return (null, parameters.ToList());
             }
+        }
+
+        private static ICommand ParseNonExplicitInput(IList<string> parameters, IConfiguration configs)
+        {
+            return new AggregateCommand(parameters.Select(p => new DownloadCommand(p, configs)), configs);
         }
     }
 }

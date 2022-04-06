@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace TwitterImgSaverCmd.Configurations
 {
-    // 
+    /// <summary>
+    /// 
+    /// </summary>
     public class Configuration : IConfiguration
     {
         // Find a way to save this to an external .cfg file, for persistence
