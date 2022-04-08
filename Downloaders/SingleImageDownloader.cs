@@ -6,16 +6,17 @@ namespace TwitterImgSaverCmd
     /// <summary>
     /// Downloader to be used when a single image link is provided
     /// </summary>
-    public class ImageDownloader : Downloader
+    public class SingleImageDownloader : Downloader
     {
-        public ImageDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
+        public SingleImageDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
         {
             Console.WriteLine(" " + _uri + " is an image file");
         }
 
         protected override Task PrepareDownloadSources()
         {
-            return Task.FromResult(ImagesList = new List<TwitterImage> { new TwitterImage(_uri) });
+            ImagesList = new List<TwitterImage> { new TwitterImage(_uri) };
+            return Task.CompletedTask;
         }
     }
 }

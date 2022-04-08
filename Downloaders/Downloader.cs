@@ -9,7 +9,7 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public abstract class Downloader : IDownloader
     {
-        protected List<TwitterImage> ImagesList;
+        protected List<TwitterImage> ImagesList = new();
         protected string SaveDirectoryPath;
         protected Uri _uri;
 
@@ -19,21 +19,15 @@ namespace TwitterImgSaverCmd
             SaveDirectoryPath = saveDirectoryPath;
         }
 
-        // not ever supposed to be called, unless a child class calls base.PrepareDownloadSources()
         protected abstract Task PrepareDownloadSources();
 
         public async Task DownloadAsync()
         {
             await PrepareDownloadSources();
 
-            if (ImagesList == null)
-            {
-                // handle somehow?
-                return;
-            }
+            if (ImagesList == null) throw new InvalidOperationException("Failed to obtain images from tweet");
 
             Console.WriteLine("");
-            List<Task> downloadTasks = new();
 
             await Task.WhenAll(ImagesList.Select(image => image.DownloadAsync(SaveDirectoryPath)));
         }

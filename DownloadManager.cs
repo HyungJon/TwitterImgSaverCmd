@@ -20,7 +20,7 @@ namespace TwitterImgSaverCmd
             return uri.Host switch
             {
                 DomainTwitter or DomainTwitterBase or DomainTwitterShortened => new TweetImagesDownloader(uri, savePath),
-                DomainTwimg => new ImageDownloader(uri, savePath),
+                DomainTwimg => new SingleImageDownloader(uri, savePath),
                 _ => null,// return a IDownloader implementer that handles invalid cases?
             };
         } 

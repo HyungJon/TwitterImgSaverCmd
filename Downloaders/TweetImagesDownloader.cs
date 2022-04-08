@@ -11,8 +11,6 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public class TweetImagesDownloader : Downloader
     {
-        private string tweetId = String.Empty;
-
         public TweetImagesDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
         {
             Console.WriteLine(" " + _uri + " is a tweet");
@@ -21,7 +19,6 @@ namespace TwitterImgSaverCmd
         protected override async Task PrepareDownloadSources()
         {
             Console.WriteLine(" Querying tweet...");
-            ImagesList = new List<TwitterImage>();
 
             using var client = new HttpClient();
             var htmlDoc = new HtmlDocument();
@@ -39,7 +36,7 @@ namespace TwitterImgSaverCmd
 
             if (url is null) throw new InvalidOperationException("Failed to obtain image source");
 
-            tweetId = url.Substring(url.LastIndexOf('/') + 1);
+            var tweetId = url.Substring(url.LastIndexOf('/') + 1);
             Console.WriteLine("  Tweeter ID: " + tweetId);
 
             // does this need error handling?
@@ -49,7 +46,7 @@ namespace TwitterImgSaverCmd
                 string imgLink = metadata.Attributes["content"].Value;
                 Console.WriteLine("  Obtained the image link " + imgLink);
 
-                ImagesList.Add(new TwitterImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i : (int?)null));
+                ImagesList.Add(new TwitterImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i : null));
             }
         }
     }
