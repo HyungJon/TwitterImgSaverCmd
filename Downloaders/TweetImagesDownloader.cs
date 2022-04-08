@@ -18,14 +18,14 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is a tweet");
         }
 
-        public override void PrepareDownloadSources()
+        public override async Task PrepareDownloadSources()
         {
             Console.WriteLine(" Querying tweet...");
             ImagesList = new List<TwitterImage>();
 
-            using WebClient webClient = new WebClient();
+            using var client = new HttpClient();
             var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(webClient.DownloadString(_uri));
+            htmlDoc.LoadHtml(await client.GetStringAsync(_uri));
 
             // obtain from metadata for less dependency to page format
             var imageMetadata = htmlDoc.DocumentNode.SelectSingleNode("html")

@@ -31,10 +31,9 @@ namespace TwitterImgSaverCmd
             string outputPath = Path.Combine(saveDirectoryPath, _fileNameToSave);
             Console.WriteLine("  Downloading from " + _fileOrigSizeLink + " to " + outputPath);
 
-            using (WebClient webClient = new WebClient())
-            {
-                await webClient.DownloadFileTaskAsync(_fileOrigSizeLink, outputPath);
-            }
+            using var client = new HttpClient();
+            var fileBytes = await client.GetByteArrayAsync(_fileOrigSizeLink);
+            File.WriteAllBytes(outputPath, fileBytes);
         }
 
         private static string ConvertImageLinkToOrig(string link)
