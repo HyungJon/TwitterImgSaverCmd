@@ -16,6 +16,6 @@ namespace TwitterImgSaverCmd.Commands
             _configs = configs;
         }
 
-        public abstract void Perform();
+        public abstract Task PerformAsync();
     }
 }

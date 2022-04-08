@@ -17,8 +17,7 @@ namespace TwitterImgSaverCmd
                 configs.LoadConfigs();
 
                 var runner = new Runner(configs);
-
-                runner.Run();
+                runner.Run().Wait();
             }
             finally
             {

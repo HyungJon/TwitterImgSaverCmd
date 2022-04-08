@@ -16,22 +16,22 @@ namespace TwitterImgSaverCmd.Commands
             _address = address;
         }
 
-        public override void Perform()
+        public override async Task PerformAsync()
         {
-            if (!Uri.TryCreate(_address, UriKind.Absolute, out Uri uri))
+            if (!Uri.TryCreate(_address, UriKind.Absolute, out var uri))
             {
                 throw new Exception("URL not valid");
             }
 
-            IDownloader downloader = DownloadFactory.GetDownloader(uri, _configs.SaveDirectoryPath);
+            var downloader = DownloadFactory.GetDownloader(uri, _configs.SaveDirectoryPath);
 
-            if (downloader == null)
+            if (downloader is null)
             {
                 throw new Exception("Domain not supported");
             }
 
             downloader.PrepareDownloadSources();
-            downloader.Download();
+            await downloader.DownloadAsync();
             // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
         }
     }

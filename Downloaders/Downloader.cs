@@ -22,7 +22,7 @@ namespace TwitterImgSaverCmd
         // not ever supposed to be called, unless a child class calls base.PrepareDownloadSources()
         public virtual void PrepareDownloadSources() { throw new NotImplementedException(); }
 
-        public void Download()
+        public async Task DownloadAsync()
         {
             if (ImagesList == null)
             {
@@ -31,14 +31,9 @@ namespace TwitterImgSaverCmd
             }
 
             Console.WriteLine("");
-            List<Task> downloadTasks = new List<Task>();
-            
-            ImagesList.ForEach(image =>
-            {
-                downloadTasks.Add(image.DownloadAsync(SaveDirectoryPath));
-            }); 
+            List<Task> downloadTasks = new();
 
-            Task.WaitAll(downloadTasks.ToArray());
+            await Task.WhenAll(ImagesList.Select(image => image.DownloadAsync(SaveDirectoryPath)));
         }
     }
 }

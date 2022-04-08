@@ -20,9 +20,9 @@ namespace TwitterImgSaverCmd.Commands
             _commands = commands;
         }
 
-        public override void Perform()
+        public override async Task PerformAsync()
         {
-            _commands.ToList().ForEach(command => command.Perform()); // isn't there a simpler syntax to this?
+            await Task.WhenAll(_commands.ToList().Select(command => command.PerformAsync()));
         }
     }
 }

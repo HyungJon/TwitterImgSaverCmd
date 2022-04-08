@@ -18,7 +18,7 @@ namespace TwitterImgSaverCmd
             _configs = configs;
         }
 
-        public void Run()
+        public async Task Run()
         {
             while (true)
             {
@@ -30,7 +30,7 @@ namespace TwitterImgSaverCmd
                 {
                     var command = ProcessInput(input);
 
-                    command.Perform();
+                    await command.PerformAsync();
                 }
                 catch (Exception ex)
                 {

@@ -15,7 +15,7 @@ namespace TwitterImgSaverCmd
         private const string DomainTwitterShortened = "t.co";
         private const string DomainTwimg = "pbs.twimg.com";
 
-        public static IDownloader GetDownloader(Uri uri, string savePath)
+        public static IDownloader? GetDownloader(Uri uri, string savePath)
         {
             return uri.Host switch
             {

@@ -3,6 +3,6 @@
     public interface IDownloader
     {
         void PrepareDownloadSources();
-        void Download();
+        Task DownloadAsync();
     }
 }

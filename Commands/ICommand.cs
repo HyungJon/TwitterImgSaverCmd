@@ -8,6 +8,6 @@ namespace TwitterImgSaverCmd.Commands
 {
     public interface ICommand
     {
-        void Perform();
+        Task PerformAsync();
     }
 }

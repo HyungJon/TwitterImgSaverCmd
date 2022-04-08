@@ -17,7 +17,7 @@ namespace TwitterImgSaverCmd.Commands
             _newDir = newDir;
         }
 
-        public override void Perform()
+        public override Task PerformAsync()
         {
             try
             {
@@ -28,6 +28,8 @@ namespace TwitterImgSaverCmd.Commands
             {
                 throw new Exception("Invalid save folder");
             }
+
+            return Task.CompletedTask;
         }
     }
 }
