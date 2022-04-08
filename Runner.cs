@@ -23,8 +23,8 @@ namespace TwitterImgSaverCmd
             while (true)
             {
                 Console.Write("Enter URL: \n> ");
-                string input = Console.ReadLine();
-                if (input.Trim(' ') == string.Empty) break;
+                var input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input?.Trim())) break;
 
                 try
                 {
@@ -39,11 +39,6 @@ namespace TwitterImgSaverCmd
             }
         }
 
-        private ICommand ProcessInput(string input)
-        {
-            var command = CommandParser.ParseCommand(input, _configs);
-
-            return command;
-        }
+        private ICommand ProcessInput(string input) => CommandParser.ParseCommand(input, _configs);
     }
 }

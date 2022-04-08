@@ -30,9 +30,7 @@ namespace TwitterImgSaverCmd.Commands
                 throw new Exception("Domain not supported");
             }
 
-            await downloader.PrepareDownloadSources();
             await downloader.DownloadAsync();
-            // any way to totally enforce the condition that PrepareDownloadSources() is called before Download()?
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is an image file");
         }
 
-        public override Task PrepareDownloadSources()
+        protected override Task PrepareDownloadSources()
         {
             return Task.FromResult(ImagesList = new List<TwitterImage> { new TwitterImage(_uri) });
         }

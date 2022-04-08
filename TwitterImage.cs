@@ -19,7 +19,7 @@ namespace TwitterImgSaverCmd
         {
             var fileLink = uri.AbsoluteUri;
             _fileOrigSizeLink = ConvertImageLinkToOrig(fileLink);
-            var fileName = DropOrigFromFilename(_fileOrigSizeLink.Substring(_fileOrigSizeLink.LastIndexOf('/') + 1));
+            var fileName = DropOrigFromFilename(_fileOrigSizeLink[(_fileOrigSizeLink.LastIndexOf('/') + 1)..]);
 
             _fileNameToSave = (tweetId != null)
                 ? $"{tweetId}{ (index.HasValue ? $"_{index.Value}" : string.Empty) }.{ParseExtension(fileName)}"
@@ -44,7 +44,7 @@ namespace TwitterImgSaverCmd
 
         private static string ParseExtension(string link)
         {
-            return link.Substring(link.LastIndexOf('.') + 1);
+            return link[(link.LastIndexOf('.') + 1)..];
         }
 
         private static string ConvertExtensionToOrig(string extension)

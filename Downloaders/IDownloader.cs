@@ -2,7 +2,6 @@
 {
     public interface IDownloader
     {
-        Task PrepareDownloadSources();
         Task DownloadAsync();
     }
 }

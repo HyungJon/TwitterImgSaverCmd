@@ -20,10 +20,12 @@ namespace TwitterImgSaverCmd
         }
 
         // not ever supposed to be called, unless a child class calls base.PrepareDownloadSources()
-        public virtual Task PrepareDownloadSources() { throw new NotImplementedException(); }
+        protected abstract Task PrepareDownloadSources();
 
         public async Task DownloadAsync()
         {
+            await PrepareDownloadSources();
+
             if (ImagesList == null)
             {
                 // handle somehow?

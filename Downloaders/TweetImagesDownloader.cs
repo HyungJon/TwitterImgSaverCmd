@@ -18,7 +18,7 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is a tweet");
         }
 
-        public override async Task PrepareDownloadSources()
+        protected override async Task PrepareDownloadSources()
         {
             Console.WriteLine(" Querying tweet...");
             ImagesList = new List<TwitterImage>();
@@ -36,6 +36,9 @@ namespace TwitterImgSaverCmd
                                                     .SelectSingleNode("head")
                                                     .SelectSingleNode("//meta[@property='og:url']");
             var url = urlMetadata.Attributes["content"].Value;
+
+            if (url is null) throw new InvalidOperationException("Failed to obtain image source");
+
             tweetId = url.Substring(url.LastIndexOf('/') + 1);
             Console.WriteLine("  Tweeter ID: " + tweetId);
 
