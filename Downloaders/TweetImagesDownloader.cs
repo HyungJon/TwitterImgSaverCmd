@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using HtmlAgilityPack;
+using TwitterImgSaverCmd.Image;
 
 namespace TwitterImgSaverCmd
 {
@@ -46,7 +47,7 @@ namespace TwitterImgSaverCmd
                 string imgLink = metadata.Attributes["content"].Value;
                 Console.WriteLine("  Obtained the image link " + imgLink);
 
-                ImagesList.Add(new TwitterImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i : null));
+                ImagesList.Add(new TweetImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i + 1 : null));
             }
         }
     }

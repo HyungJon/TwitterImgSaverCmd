@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TwitterImgSaverCmd.Image;
 
 namespace TwitterImgSaverCmd
 {
@@ -9,7 +10,7 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public abstract class Downloader : IDownloader
     {
-        protected List<TwitterImage> ImagesList = new();
+        protected List<IImage> ImagesList = new();
         protected string SaveDirectoryPath;
         protected Uri _uri;
 

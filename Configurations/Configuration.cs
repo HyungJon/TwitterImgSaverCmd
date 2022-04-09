@@ -30,5 +30,8 @@ namespace TwitterImgSaverCmd.Configurations
 
         // TODO: Is there a way to avoid having to pass the configs everywhere, even where it's never needed directly?
         // Probably by implementing a static ConfigManager class
+
+        // TODO: Upon implementing configs save and UI, add RunUi configuration that determines whether this program will run with UI or with console
+        // Also add a new command that updates this config
     }
 }
