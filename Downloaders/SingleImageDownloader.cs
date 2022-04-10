@@ -6,7 +6,6 @@ namespace TwitterImgSaverCmd
 {
     /// <summary>
     /// Downloader to be used when a single image link is provided
-    /// This is actually mostly obsolete with current Twitter structure, but is still supported in this project
     /// </summary>
     public class SingleImageDownloader : Downloader
     {

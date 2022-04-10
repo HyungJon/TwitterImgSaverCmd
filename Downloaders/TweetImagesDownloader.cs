@@ -37,7 +37,7 @@ namespace TwitterImgSaverCmd
 
             if (url is null) throw new InvalidOperationException("Failed to obtain image source");
 
-            var tweetId = url.Substring(url.LastIndexOf('/') + 1);
+            var tweetId = url[(url.LastIndexOf('/') + 1)..];
             Console.WriteLine("  Tweeter ID: " + tweetId);
 
             // does this need error handling?
