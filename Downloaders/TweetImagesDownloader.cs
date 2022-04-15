@@ -17,8 +17,10 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is a tweet");
         }
 
-        protected override async Task PrepareDownloadSources()
+        protected override async Task<IEnumerable<IImage>> PrepareDownloadSourcesAsync()
         {
+            var imageList = new List<IImage>();
+
             Console.WriteLine(" Querying tweet...");
 
             using var client = new HttpClient();
@@ -47,8 +49,10 @@ namespace TwitterImgSaverCmd
                 string imgLink = metadata.Attributes["content"].Value;
                 Console.WriteLine("  Obtained the image link " + imgLink);
 
-                ImagesList.Add(new TweetImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i + 1 : null));
+                imageList.Add(new TweetImage(new Uri(imgLink), tweetId, (imageMetadata.Count > 1) ? i + 1 : null));
             }
+
+            return imageList;
         }
     }
 }

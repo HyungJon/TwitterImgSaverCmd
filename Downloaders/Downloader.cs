@@ -10,7 +10,6 @@ namespace TwitterImgSaverCmd
     /// </summary>
     public abstract class Downloader : IDownloader
     {
-        protected List<IImage> ImagesList = new();
         protected string SaveDirectoryPath;
         protected Uri _uri;
 
@@ -20,17 +19,17 @@ namespace TwitterImgSaverCmd
             SaveDirectoryPath = saveDirectoryPath;
         }
 
-        protected abstract Task PrepareDownloadSources();
+        protected abstract Task<IEnumerable<IImage>> PrepareDownloadSourcesAsync();
 
         public async Task DownloadAsync()
         {
-            await PrepareDownloadSources();
+            var imageSources = await PrepareDownloadSourcesAsync();
 
-            if (ImagesList == null) throw new InvalidOperationException("Failed to obtain images from tweet");
+            if (imageSources == null) throw new InvalidOperationException("Failed to obtain images from tweet");
 
             Console.WriteLine("");
 
-            await Task.WhenAll(ImagesList.Select(image => image.DownloadAsync(SaveDirectoryPath)));
+            await Task.WhenAll(imageSources.Select(image => image.DownloadAsync(SaveDirectoryPath)));
         }
     }
 }
