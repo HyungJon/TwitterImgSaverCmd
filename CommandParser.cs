@@ -33,7 +33,7 @@ namespace TwitterImgSaverCmd
                     else
                         return new ChdirCommand(parameters[0], configs);
                 case CommandType.Download:
-                    return new AggregateCommand(parameters.Select(p => new DownloadCommand(p, configs)), configs);
+                    return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
             }
 
             throw new InvalidOperationException("Could not parse input: unrecognized command");
@@ -53,7 +53,7 @@ namespace TwitterImgSaverCmd
 
         private static ICommand ParseNonExplicitInput(IList<string> parameters, IConfiguration configs)
         {
-            return new AggregateCommand(parameters.Select(p => new DownloadCommand(p, configs)), configs);
+            return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
         }
     }
 }
