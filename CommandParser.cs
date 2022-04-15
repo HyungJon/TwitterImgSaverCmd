@@ -53,6 +53,7 @@ namespace TwitterImgSaverCmd
 
         private static ICommand ParseNonExplicitInput(IList<string> parameters, IConfiguration configs)
         {
+            // temp code: as commented above, this may need to be updated in the future if more commands are allowed to be non-explicit
             return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
         }
     }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TwitterImgSaverCmd.Image
 {
-    public abstract class Image : IImage
+    public abstract class DownloadableImage : IDownloadableImage
     {
         protected readonly string _fileLink;
         protected readonly string? _tweetId;
         protected readonly int? _index;
 
-        protected Image(Uri uri, string? tweetId = null, int? index = null)
+        protected DownloadableImage(Uri uri, string? tweetId = null, int? index = null)
         {
             _fileLink = uri.AbsoluteUri;
             _tweetId = tweetId;

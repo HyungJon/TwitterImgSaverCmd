@@ -19,7 +19,7 @@ namespace TwitterImgSaverCmd
             SaveDirectoryPath = saveDirectoryPath;
         }
 
-        protected abstract Task<IEnumerable<IImage>> PrepareDownloadSourcesAsync();
+        protected abstract Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync();
 
         public async Task DownloadAsync()
         {

@@ -14,6 +14,6 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is an image file");
         }
 
-        protected override Task<IEnumerable<IImage>> PrepareDownloadSourcesAsync() => Task.FromResult(new List<IImage> { new DirectUrlImage(_uri) } as IEnumerable<IImage>);
+        protected override Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync() => Task.FromResult(new List<IDownloadableImage> { new DirectUrlImage(_uri) } as IEnumerable<IDownloadableImage>);
     }
 }

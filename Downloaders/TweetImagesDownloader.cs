@@ -17,9 +17,9 @@ namespace TwitterImgSaverCmd
             Console.WriteLine(" " + _uri + " is a tweet");
         }
 
-        protected override async Task<IEnumerable<IImage>> PrepareDownloadSourcesAsync()
+        protected override async Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync()
         {
-            var imageList = new List<IImage>();
+            var imageList = new List<IDownloadableImage>();
 
             Console.WriteLine(" Querying tweet...");
 

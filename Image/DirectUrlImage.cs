@@ -9,7 +9,7 @@ namespace TwitterImgSaverCmd.Image
     /// <summary>
     /// Represents an image as obtained from image link
     /// </summary>
-    public class DirectUrlImage : Image
+    public class DirectUrlImage : DownloadableImage
     {
         public DirectUrlImage(Uri uri) : base(uri, null, null)
         {

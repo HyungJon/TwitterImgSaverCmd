@@ -9,7 +9,7 @@ namespace TwitterImgSaverCmd.Image
     /// <summary>
     /// Represents an image as obtained from a tweet link
     /// </summary>
-    public class TweetImage : Image
+    public class TweetImage : DownloadableImage
     {
         public TweetImage(Uri uri, string tweetId, int? index = null) : base(uri, tweetId, index)
         {

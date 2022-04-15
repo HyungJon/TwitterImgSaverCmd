@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TwitterImgSaverCmd.Image
 {
-    public  interface IImage
+    public  interface IDownloadableImage
     {
         Task DownloadAsync(string saveDirectoryPath);
     }
