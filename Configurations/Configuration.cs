@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SoftCircuits.IniFileParser;
 
 namespace TwitterImgSaverCmd.Configurations
 {
@@ -11,18 +12,31 @@ namespace TwitterImgSaverCmd.Configurations
     {
         // Find a way to save this to an external .cfg file, for persistence
 
-        public string SaveDirectoryPath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private readonly IniFile _configFile = new();
+        private readonly string _configFilePath = "config.ini";
+
+        public string SaveDirectoryPath { get; set; }
+
+        public Configuration()
+        {
+            // check path first, and create file
+            using StreamWriter w = File.AppendText(_configFilePath);
+        }
 
         /// <inheritdoc />
         public void LoadConfigs()
         {
-            Console.WriteLine();
+            _configFile.Load(_configFilePath);
+
+            SaveDirectoryPath = _configFile.GetSetting(IniFile.DefaultSectionName, nameof(SaveDirectoryPath), Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
         }
 
         /// <inheritdoc />
         public void SaveConfigs()
         {
-            Console.WriteLine();
+            _configFile.SetSetting(IniFile.DefaultSectionName, nameof(SaveDirectoryPath), SaveDirectoryPath);
+
+            _configFile.Save(_configFilePath);
         }
 
 
