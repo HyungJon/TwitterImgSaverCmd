@@ -21,7 +21,7 @@ namespace TwitterImgSaverCmd.Commands
         {
             try
             {
-                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
+                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir); // todo: ensure that _newDir is an absolute path
                 Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
             }
             catch (Exception)
