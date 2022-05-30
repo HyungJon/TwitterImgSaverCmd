@@ -10,7 +10,9 @@ namespace TwitterImgSaverCmd
 {
     public enum CommandType
     {
-        Download, ChangeDir
+        Download, ChangeDir,
+        // consider:
+        // addDir, rmDir
     }
 
     public static class CommandParser
@@ -54,6 +56,7 @@ namespace TwitterImgSaverCmd
         private static ICommand ParseNonExplicitInput(IList<string> parameters, IConfiguration configs)
         {
             // temp code: as commented above, this may need to be updated in the future if more commands are allowed to be non-explicit
+            // C# can distinguish between web link and file path using new Uri(path).IsFile, consider enabling non-explicit chdir
             return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
         }
     }

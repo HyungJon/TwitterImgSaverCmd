@@ -19,9 +19,16 @@ namespace TwitterImgSaverCmd.Commands
 
         public override Task PerformAsync()
         {
+            if (_newDir is null)
+                throw new NullReferenceException("Provided folder path was null");
+
+            if (!Path.IsPathRooted(_newDir) || Path.GetPathRoot(_newDir)!.Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                throw new ArgumentException("Must provide full folder path");
+            // TODO: expand to make it work for Linux environment
+
             try
             {
-                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir); // todo: ensure that _newDir is an absolute path
+                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
                 Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
             }
             catch (Exception)
