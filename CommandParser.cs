@@ -30,8 +30,7 @@ namespace TwitterImgSaverCmd
                 case CommandType.ChangeDir:
                     if (parameters.Count > 2)
                         throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
-                        // actually, could consider saving to multiple locations, using add/remove/clear directory command instead
-                        // also could just ignore the rest 
+                        // TODO: once saving to multiple directories is implemented, remove this restriction
                     else
                         return new ChdirCommand(parameters[0], configs);
                 case CommandType.Download:
@@ -45,7 +44,7 @@ namespace TwitterImgSaverCmd
         {
             // this logic was implemented in case the parsing logic is updated so that there can be input without explicit command that isn't download
             // in which case the method that receives this should need to further parse the input to figure out what the command is
-            return parameters[0] switch
+            return parameters[0].ToLower() switch
             {
                 "chdir" => (CommandType.ChangeDir, parameters.Skip(1).ToList()),
                 "download" => (CommandType.Download, parameters.Skip(1).ToList()),

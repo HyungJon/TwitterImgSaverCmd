@@ -23,8 +23,9 @@ namespace TwitterImgSaverCmd
             while (true)
             {
                 Console.Write("Enter URL: \n> ");
-                var input = Console.ReadLine();
-                if (string.IsNullOrEmpty(input?.Trim())) break;
+                var input = Console.ReadLine()?.Trim();
+                if (string.IsNullOrEmpty(input)) continue;
+                else if (input.ToLower() == "exit") break;
 
                 try
                 {

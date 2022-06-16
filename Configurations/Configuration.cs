@@ -19,6 +19,7 @@ namespace TwitterImgSaverCmd.Configurations
         // TODO: enable saving to multiple directories
         // either add a SecondarySaveDirectoryPath, or find a way to enable multiple elements in one value
         // separator is known to work, but hopefully an array would be better
+        // biggest reason against separator is that different OS have different path name rules
 
         public Configuration()
         {

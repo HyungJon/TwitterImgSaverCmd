@@ -19,12 +19,7 @@ namespace TwitterImgSaverCmd.Commands
 
         public override Task PerformAsync()
         {
-            if (_newDir is null)
-                throw new NullReferenceException("Provided folder path was null");
-
-            if (!Path.IsPathRooted(_newDir) || Path.GetPathRoot(_newDir)!.Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
-                throw new ArgumentException("Must provide full folder path");
-            // TODO: expand to make it work for Linux environment
+            ValidateSavePath(_newDir);
 
             try
             {
@@ -37,6 +32,21 @@ namespace TwitterImgSaverCmd.Commands
             }
 
             return Task.CompletedTask;
+        }
+
+        private static void ValidateSavePath(string path)
+        {
+            if (path is null)
+                throw new NullReferenceException("Folder path cannot be null");
+
+            if (!Path.IsPathRooted(path) || Path.GetPathRoot(path)!.Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                throw new ArgumentException("Must provide full folder path");
+            // TODO: expand to make it work for Linux environment
+
+            if (!Directory.Exists(path))
+                throw new FileNotFoundException($"Save folder {path} could not be found");
+
+            // TODO: check if program has write permission
         }
     }
 }
