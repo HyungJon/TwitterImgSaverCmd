@@ -21,7 +21,7 @@ namespace TwitterImgSaverCmd
 
         protected abstract Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync();
 
-        public async Task DownloadAsync()
+        public async Task DownloadAsync(string? filenameToUse = null)
         {
             var imageSources = await PrepareDownloadSourcesAsync();
 
@@ -29,7 +29,7 @@ namespace TwitterImgSaverCmd
 
             Console.WriteLine("");
 
-            await Task.WhenAll(imageSources.Select(image => image.DownloadAsync(SaveDirectoryPath)));
+            await Task.WhenAll(imageSources.Select(image => image.DownloadAsync(SaveDirectoryPath, filenameToUse)));
         }
     }
 }

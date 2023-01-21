@@ -25,11 +25,20 @@ namespace TwitterImgSaverCmd.Image
 
         protected abstract string GenerateOutputFileName(string outputFilenameBase);
 
-        public async Task DownloadAsync(string saveDirectoryPath)
+        protected static string ParseExtension(string link)
+        {
+            return link[(link.LastIndexOf('.') + 1)..];
+        }
+
+        public async Task DownloadAsync(string saveDirectoryPath, string? filenameToUse = null)
         {
             var fileOrigSizeLink = GetOriginalSizeFileLink(_fileLink);
             var outputFilenameBase = ParseFilenameFromLink(fileOrigSizeLink);
             var outputFilename = GenerateOutputFileName(outputFilenameBase);
+            if (filenameToUse is not null)
+            {
+                outputFilename = filenameToUse + '.' + ParseExtension(outputFilename);
+            }
 
             var outputPath = Path.Combine(saveDirectoryPath, outputFilename);
             Console.WriteLine("  Downloading from " + fileOrigSizeLink + " to " + outputPath);

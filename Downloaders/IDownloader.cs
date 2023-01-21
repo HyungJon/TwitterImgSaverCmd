@@ -2,6 +2,6 @@
 {
     public interface IDownloader
     {
-        Task DownloadAsync();
+        Task DownloadAsync(string? filenameToUse = null);
     }
 }

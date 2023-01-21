@@ -56,6 +56,35 @@ namespace TwitterImgSaverCmd
         {
             // temp code: as commented above, this may need to be updated in the future if more commands are allowed to be non-explicit
             // C# can distinguish between web link and file path using new Uri(path).IsFile, consider enabling non-explicit chdir
+
+            if (!Uri.TryCreate(parameters[0], UriKind.Absolute, out var _))
+            {
+                var filename = parameters[0];
+                var imageLinks = parameters.Skip(1).ToList();
+                if (!imageLinks.Any())
+                {
+                    throw new InvalidOperationException("No links to save provided");
+                }
+                else if (imageLinks.Count == 1)
+                {
+                    return new DownloadCommand(imageLinks[0], configs, filename);
+                }
+                else
+                {
+                    var downloadCommands = new List<DownloadCommand>();
+                    for (var i = 0; i < imageLinks.Count; i++)
+                    {
+                        // note: in the old implementation where the tweet attachments list could be directly derived from a tweet metadata,
+                        // the index assignment was done in TweetImagesDownloader
+                        // this is inevitable now that the old method cannot be used any more, but it's possible that moving index assignment logic
+                        // further down (e.g. create a new Command subclass) may be preferable
+                        downloadCommands.Add(new DownloadCommand(imageLinks[i], configs, filename + '_' + (i + 1)));
+                    }
+                    return new AggregateCommand(downloadCommands, configs);
+                }
+
+            }
+
             return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
         }
     }

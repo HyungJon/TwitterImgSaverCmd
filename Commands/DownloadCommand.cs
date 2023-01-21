@@ -10,10 +10,12 @@ namespace TwitterImgSaverCmd.Commands
     public class DownloadCommand : Command
     {
         private readonly string _address;
+        private readonly string? _filename;
 
-        public DownloadCommand(string address, IConfiguration configs) : base(configs)
+        public DownloadCommand(string address, IConfiguration configs, string? filename = null) : base(configs)
         {
             _address = address;
+            _filename = filename;
         }
 
         public override async Task PerformAsync()
@@ -30,7 +32,7 @@ namespace TwitterImgSaverCmd.Commands
                 throw new Exception("Domain not supported");
             }
 
-            await downloader.DownloadAsync();
+            await downloader.DownloadAsync(_filename);
         }
     }
 }

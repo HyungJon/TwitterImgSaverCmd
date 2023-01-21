@@ -32,11 +32,6 @@ namespace TwitterImgSaverCmd.Image
         protected override string GenerateOutputFileName(string outputFilenameBase) =>
             $"{_tweetId!}{ (_index.HasValue ? $"_{_index.Value}" : string.Empty) }.{ParseExtension(outputFilenameBase)}";
 
-        private static string ParseExtension(string link)
-        {
-            return link[(link.LastIndexOf('.') + 1)..];
-        }
-
         private static string ConvertExtensionToOrig(string extension)
         {
             var baseExtension = extension.Contains(':') ? extension[..extension.LastIndexOf(':')] : extension;
