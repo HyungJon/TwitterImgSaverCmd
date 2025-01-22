@@ -11,11 +11,13 @@ namespace TwitterImgSaverCmd.Commands
     {
         private readonly string _address;
         private readonly string? _filename;
+        private readonly string? _savePathOverride;
 
-        public DownloadCommand(string address, IConfiguration configs, string? filename = null) : base(configs)
+        public DownloadCommand(string address, IConfiguration configs, string? filename = null, string? savePathOverride = null) : base(configs)
         {
             _address = address;
             _filename = filename;
+            _savePathOverride = savePathOverride;
         }
 
         public override async Task PerformAsync()
@@ -25,7 +27,7 @@ namespace TwitterImgSaverCmd.Commands
                 throw new Exception("URL not valid");
             }
 
-            var downloader = DownloadFactory.GetDownloader(uri, _configs.SaveDirectoryPath);
+            var downloader = DownloadFactory.GetDownloader(uri, _savePathOverride ?? Configs.SaveDirectoryPath);
 
             if (downloader is null)
             {

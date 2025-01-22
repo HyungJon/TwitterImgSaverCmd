@@ -23,8 +23,8 @@ namespace TwitterImgSaverCmd.Commands
 
             try
             {
-                _configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
-                Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
+                Configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
+                Console.WriteLine(" Save folder changed to " + Configs.SaveDirectoryPath);
             }
             catch (Exception)
             {

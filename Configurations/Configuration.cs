@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SoftCircuits.IniFileParser;
 
 namespace TwitterImgSaverCmd.Configurations
@@ -11,10 +14,12 @@ namespace TwitterImgSaverCmd.Configurations
     public class Configuration : IConfiguration
     {
         private readonly IniFile _configFile = new();
-        private const string _configFileName = "configs.ini";
+        private const string ConfigFileName = "configs.ini";
         
         private readonly string _saveDirectoryPathDefault = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         public string SaveDirectoryPath { get; set; }
+
+        public Dictionary<string, string> SavePathShortcuts { get; set; } = new();
 
         // TODO: enable saving to multiple directories
         // either add a SecondarySaveDirectoryPath, or find a way to enable multiple elements in one value
@@ -25,23 +30,33 @@ namespace TwitterImgSaverCmd.Configurations
         {
             SaveDirectoryPath = _saveDirectoryPathDefault;
 
-            using StreamWriter _ = File.AppendText(_configFileName); // check path first, and create file if not found
+            using StreamWriter _ = File.AppendText(ConfigFileName); // check path first, and create file if not found
         }
 
         /// <inheritdoc />
         public void LoadConfigs()
         {
-            _configFile.Load(_configFileName);
+            _configFile.Load(ConfigFileName);
 
             SaveDirectoryPath = _configFile.GetSetting(IniFile.DefaultSectionName, nameof(SaveDirectoryPath)) ?? _saveDirectoryPathDefault;
+            var shortcutsJsonString = _configFile.GetSetting(IniFile.DefaultSectionName, nameof(SavePathShortcuts)) ?? string.Empty;
+            try
+            {
+                SavePathShortcuts = JsonConvert.DeserializeObject<Dictionary<string, string>>(shortcutsJsonString) ?? new Dictionary<string, string>();
+            }
+            catch (JsonException)
+            {
+                throw new InvalidOperationException("Shortcuts information in invalid format");
+            }
         }
 
         /// <inheritdoc />
         public void SaveConfigs()
         {
             _configFile.SetSetting(IniFile.DefaultSectionName, nameof(SaveDirectoryPath), SaveDirectoryPath);
+            _configFile.SetSetting(IniFile.DefaultSectionName, nameof(SavePathShortcuts), JsonConvert.SerializeObject(SavePathShortcuts));
 
-            _configFile.Save(_configFileName);
+            _configFile.Save(ConfigFileName);
         }
 
 

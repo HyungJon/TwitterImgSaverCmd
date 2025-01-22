@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CurlThin" Version="0.0.7" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="SoftCircuits.IniFileParser" Version="2.1.0" />
   </ItemGroup>

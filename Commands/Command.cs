@@ -9,11 +9,11 @@ namespace TwitterImgSaverCmd.Commands
 {
     public abstract class Command : ICommand
     {
-        protected readonly IConfiguration _configs;
+        protected readonly IConfiguration Configs;
 
-        public Command(IConfiguration configs)
+        protected Command(IConfiguration configs)
         {
-            _configs = configs;
+            Configs = configs;
         }
 
         public abstract Task PerformAsync();

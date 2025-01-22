@@ -8,6 +8,11 @@ namespace TwitterImgSaverCmd.Configurations
 {
     public interface IConfiguration
     {
+        string SaveDirectoryPath { get; set; }
+        // TODO: look into supporting multiple paths
+        
+        Dictionary<string, string> SavePathShortcuts { get; set; }
+        
         // If more are added, consider splitting to individual configs or by category
         // and creating a ConfigurationManager class to manage the configs
         // It could be a static class
@@ -21,8 +26,5 @@ namespace TwitterImgSaverCmd.Configurations
         /// Save current configs to file
         /// </summary>
         void SaveConfigs();
-
-        string SaveDirectoryPath { get; set; }
-        // TODO: look into supporting multiple paths
     }
 }
