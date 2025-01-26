@@ -41,11 +41,15 @@ namespace TwitterImgSaverCmd.Image
             }
 
             var outputPath = Path.Combine(saveDirectoryPath, outputFilename);
+            if (File.Exists(outputPath))
+            {
+                Console.WriteLine("  Overwriting existing file at " + outputPath);
+            }
             Console.WriteLine("  Downloading from " + fileOrigSizeLink + " to " + outputPath);
 
             using var client = new HttpClient();
             var fileBytes = await client.GetByteArrayAsync(fileOrigSizeLink);
-            File.WriteAllBytes(outputPath, fileBytes);
+            await File.WriteAllBytesAsync(outputPath, fileBytes);
         }
     }
 }

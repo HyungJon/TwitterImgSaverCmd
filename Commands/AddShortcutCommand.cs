@@ -20,7 +20,8 @@ public class AddShortcutCommand : Command
             throw new InvalidOperationException($"Directory {_path} does not exist");
         }
         
-        // add
+        Console.WriteLine($"  Adding shortcut to folder {_path} as keyword {_keyword}");
+        
         Configs.SavePathShortcuts.Add(_keyword, _path);
         return Task.CompletedTask;
     }

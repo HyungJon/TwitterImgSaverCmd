@@ -19,7 +19,7 @@ namespace TwitterImgSaverCmd.Image
 
         protected override string GetOriginalSizeFileLink(string link)
         {
-            var sizeName = link[(link.LastIndexOf("name=") + 1)..];
+            var sizeName = link[(link.LastIndexOf("name=", StringComparison.Ordinal) + 1)..];
             return link.Replace(sizeName, ConvertExtensionToOrig(sizeName));
         }
 
@@ -29,7 +29,7 @@ namespace TwitterImgSaverCmd.Image
             var filenameEndIdx = link.IndexOf('?');
             var filename = link[filenameStartIdx..filenameEndIdx];
 
-            var extensionStartIdx = link.IndexOf("=") + 1;
+            var extensionStartIdx = link.IndexOf("=", StringComparison.Ordinal) + 1;
             var extensionEndIdx = link.IndexOf('&');
             var extension = link[extensionStartIdx..extensionEndIdx];
 
