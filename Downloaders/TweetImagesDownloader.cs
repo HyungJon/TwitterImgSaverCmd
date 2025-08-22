@@ -28,6 +28,7 @@ namespace TwitterImgSaverCmd
             htmlDoc.LoadHtml(await client.GetStringAsync(_uri));
 
             // obtain from metadata for less dependency to page format
+            var imageNodes = htmlDoc.DocumentNode.SelectNodes("//pbs.twimg.com");
             var imageMetadata = htmlDoc.DocumentNode.SelectSingleNode("html")
                                                     .SelectSingleNode("head")
                                                     .SelectNodes("//meta[@property='og:image']");

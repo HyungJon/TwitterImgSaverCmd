@@ -13,13 +13,14 @@ namespace TwitterImgSaverCmd
         private const string DomainTwitter = "www.twitter.com";
         private const string DomainTwitterBase = "twitter.com";
         private const string DomainTwitterShortened = "t.co";
+        private const string DomainTwitterX = "x.com";
         private const string DomainTwimg = "pbs.twimg.com";
 
         public static IDownloader? GetDownloader(Uri uri, string savePath)
         {
             return uri.Host switch
             {
-                DomainTwitter or DomainTwitterBase or DomainTwitterShortened => new TweetImagesDownloader(uri, savePath),
+                DomainTwitter or DomainTwitterBase or DomainTwitterShortened or DomainTwitterX => new TweetImagesDownloader(uri, savePath),
                 DomainTwimg => new SingleImageDownloader(uri, savePath),
                 _ => null,// return a IDownloader implementer that handles invalid cases?
             };

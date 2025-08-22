@@ -23,6 +23,7 @@ public class AddShortcutCommand : Command
         Console.WriteLine($"  Adding shortcut to folder {_path} as keyword {_keyword}");
         
         Configs.SavePathShortcuts.Add(_keyword, _path);
+        Configs.SaveConfigs();
         return Task.CompletedTask;
     }
 }
