@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TwitterImgSaverCmd.Configurations;
 
-namespace TwitterImgSaverCmd.Configurations
+public interface IConfiguration
 {
-    public interface IConfiguration
-    {
-        string SaveDirectoryPath { get; set; }
-        // TODO: look into supporting multiple paths
+    string SaveDirectoryPath { get; set; }
+    // TODO: look into supporting multiple paths
         
-        Dictionary<string, string> SavePathShortcuts { get; set; }
+    Dictionary<string, string> SavePathShortcuts { get; set; }
         
-        // If more are added, consider splitting to individual configs or by category
-        // and creating a ConfigurationManager class to manage the configs
-        // It could be a static class
+    // If more are added, consider splitting to individual configs or by category
+    // and creating a ConfigurationManager class to manage the configs
+    // It could be a static class
 
-        /// <summary>
-        /// Load configs from file
-        /// </summary>
-        void LoadConfigs();
+    /// <summary>
+    /// Load configs from file
+    /// </summary>
+    void LoadConfigs();
 
-        /// <summary>
-        /// Save current configs to file
-        /// </summary>
-        void SaveConfigs();
-    }
+    /// <summary>
+    /// Save current configs to file
+    /// </summary>
+    void SaveConfigs();
 }

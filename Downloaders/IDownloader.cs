@@ -1,7 +1,6 @@
-﻿namespace TwitterImgSaverCmd
+﻿namespace TwitterImgSaverCmd.Downloaders;
+
+public interface IDownloader
 {
-    public interface IDownloader
-    {
-        Task DownloadAsync(string? filenameToUse = null);
-    }
+    Task DownloadAsync(string? filenameToUse = null);
 }

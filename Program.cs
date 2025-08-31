@@ -1,28 +1,26 @@
-﻿using System;
-using TwitterImgSaverCmd.Configurations;
+﻿using TwitterImgSaverCmd.Configurations;
 
-namespace TwitterImgSaverCmd
+namespace TwitterImgSaverCmd;
+
+/// <summary>
+/// A test project that only tests the workflow of downloading images in original size from given Twitter web page
+/// </summary>
+public class Program
 {
-    /// <summary>
-    /// A test project that only tests the workflow of downloading images in original size from given Twitter web page
-    /// </summary>
-    public class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
+        var configs = new Configuration();
+
+        try
         {
-            var configs = new Configuration();
+            configs.LoadConfigs();
 
-            try
-            {
-                configs.LoadConfigs();
-
-                var runner = new Runner(configs);
-                runner.Run().Wait();
-            }
-            finally
-            {
-                configs.SaveConfigs();
-            }
+            var runner = new Runner(configs);
+            runner.Run().Wait();
+        }
+        finally
+        {
+            configs.SaveConfigs();
         }
     }
 }

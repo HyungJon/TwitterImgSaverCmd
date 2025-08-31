@@ -1,52 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwitterImgSaverCmd.Configurations;
+﻿using TwitterImgSaverCmd.Configurations;
 
-namespace TwitterImgSaverCmd.Commands
+namespace TwitterImgSaverCmd.Commands;
+
+public class ChdirCommand : Command
 {
-    public class ChdirCommand : Command
+    private readonly string _newDir;
+
+    public ChdirCommand(string newDir, IConfiguration configs) : base(configs)
     {
-        private readonly string _newDir;
+        _newDir = newDir;
+    }
 
-        public ChdirCommand(string newDir, IConfiguration configs) : base(configs)
+    public override Task PerformAsync()
+    {
+        ValidateSavePath(_newDir);
+
+        try
         {
-            _newDir = newDir;
+            Configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
+            Console.WriteLine(" Save folder changed to " + Configs.SaveDirectoryPath);
+        }
+        catch (Exception)
+        {
+            throw new Exception("Invalid save folder");
         }
 
-        public override Task PerformAsync()
-        {
-            ValidateSavePath(_newDir);
+        return Task.CompletedTask;
+    }
 
-            try
-            {
-                Configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
-                Console.WriteLine(" Save folder changed to " + Configs.SaveDirectoryPath);
-            }
-            catch (Exception)
-            {
-                throw new Exception("Invalid save folder");
-            }
+    private static void ValidateSavePath(string path)
+    {
+        if (path is null)
+            throw new NullReferenceException("Folder path cannot be null");
 
-            return Task.CompletedTask;
-        }
+        if (!Path.IsPathRooted(path) || Path.GetPathRoot(path)!.Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+            throw new ArgumentException("Must provide full folder path");
+        // TODO: expand to make it work for Linux environment
 
-        private static void ValidateSavePath(string path)
-        {
-            if (path is null)
-                throw new NullReferenceException("Folder path cannot be null");
+        if (!Directory.Exists(path))
+            throw new FileNotFoundException($"Save folder {path} could not be found");
 
-            if (!Path.IsPathRooted(path) || Path.GetPathRoot(path)!.Equals(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
-                throw new ArgumentException("Must provide full folder path");
-            // TODO: expand to make it work for Linux environment
-
-            if (!Directory.Exists(path))
-                throw new FileNotFoundException($"Save folder {path} could not be found");
-
-            // TODO: check if program has write permission
-        }
+        // TODO: check if program has write permission
     }
 }

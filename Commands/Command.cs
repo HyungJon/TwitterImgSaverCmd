@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwitterImgSaverCmd.Configurations;
+﻿using TwitterImgSaverCmd.Configurations;
 
-namespace TwitterImgSaverCmd.Commands
+namespace TwitterImgSaverCmd.Commands;
+
+public abstract class Command : ICommand
 {
-    public abstract class Command : ICommand
+    protected readonly IConfiguration Configs;
+
+    protected Command(IConfiguration configs)
     {
-        protected readonly IConfiguration Configs;
-
-        protected Command(IConfiguration configs)
-        {
-            Configs = configs;
-        }
-
-        public abstract Task PerformAsync();
+        Configs = configs;
     }
+
+    public abstract Task PerformAsync();
 }
