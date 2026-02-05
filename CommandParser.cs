@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwitterImgSaverCmd.Commands;
+﻿using TwitterImgSaverCmd.Commands;
 using TwitterImgSaverCmd.Configurations;
 
 namespace TwitterImgSaverCmd;
@@ -91,15 +86,8 @@ public static class CommandParser
             return new DownloadCommand(parameters[0], configs, filenameOverride, savePathOverride);
         }
 
-        var downloadCommands = new List<DownloadCommand>();
-        for (var i = 0; i < parameters.Count; i++)
-        {
-            // note: in the old implementation where the tweet attachments list could be directly derived from a tweet metadata,
-            // the index assignment was done in TweetImagesDownloader
-            // this is inevitable now that the old method cannot be used any more, but it's possible that moving index assignment logic
-            // further down (e.g. create a new Command subclass) may be preferable
-            downloadCommands.Add(new DownloadCommand(parameters[i], configs, filenameOverride + '_' + (i + 1), savePathOverride));
-        }
+        var downloadCommands = parameters.Select((addr, i) =>
+            new DownloadCommand(addr, configs, filenameOverride + '_' + (i + 1), savePathOverride)).ToList();
         return new AggregateCommand(downloadCommands, configs);
     }
 

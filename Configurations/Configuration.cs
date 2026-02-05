@@ -30,7 +30,7 @@ namespace TwitterImgSaverCmd.Configurations
         {
             SaveDirectoryPath = _saveDirectoryPathDefault;
 
-            using StreamWriter _ = File.AppendText(ConfigFileName); // check path first, and create file if not found
+            using var _ = File.AppendText(ConfigFileName); // check path first, and create file if not found
         }
 
         /// <inheritdoc />
