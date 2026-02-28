@@ -3,13 +3,6 @@ using TwitterImgSaverCmd.Configurations;
 
 namespace TwitterImgSaverCmd;
 
-public enum CommandType
-{
-    Download, ChangeDir, AddShortcut,
-    // consider:
-    // addDir, rmDir
-}
-
 public static class CommandParser
 {
     public static ICommand ParseCommand(string input, IConfiguration configs)
@@ -74,28 +67,17 @@ public static class CommandParser
         if (configs.SavePathShortcuts.TryGetValue(parameters.Last(), out var savePathOverride))
         {
             parameters.RemoveAt(parameters.Count - 1);
-        }
-        
-        if (!parameters.Any())
-        {
-            throw new InvalidOperationException("No links to save provided");
+            // consider supporting save to multiple folders at once
         }
 
-        if (parameters.Count == 1)
+        return parameters.Count switch
         {
-            return new DownloadCommand(parameters[0], configs, filenameOverride, savePathOverride);
-        }
-
-        var downloadCommands = new List<DownloadCommand>();
-        for (var i = 0; i < parameters.Count; i++)
-        {
-            // note: in the old implementation where the tweet attachments list could be directly derived from a tweet metadata,
-            // the index assignment was done in TweetImagesDownloader
-            // this is inevitable now that the old method cannot be used any more, but it's possible that moving index assignment logic
-            // further down (e.g. create a new Command subclass) may be preferable
-            downloadCommands.Add(new DownloadCommand(parameters[i], configs, filenameOverride + '_' + (i + 1), savePathOverride));
-        }
-        return new AggregateCommand(downloadCommands, configs);
+            0 => throw new InvalidOperationException("No links to save provided"),
+            1 => new DownloadCommand(parameters[0], configs, filenameOverride, savePathOverride),
+            _ => new AggregateCommand(
+                parameters.Select((t, i) => new DownloadCommand(t, configs, filenameOverride + '_' + (i + 1), savePathOverride)).ToList(),
+                configs)
+        };
     }
 
     private static (string?, IList<string>) ParseSourcesAndShortcut(IList<string> parameters, IConfiguration configs)
@@ -106,4 +88,12 @@ public static class CommandParser
             ? (shortcut, parameters.SkipLast(1).ToList())
             : (null, parameters);
     }
+    
+    private enum CommandType
+    {
+        Download, ChangeDir, AddShortcut,
+        // consider:
+        // addDir, rmDir
+    }
+
 }
