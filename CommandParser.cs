@@ -3,9 +3,16 @@ using TwitterImgSaverCmd.Configurations;
 
 namespace TwitterImgSaverCmd;
 
-public static class CommandParser
+public class CommandParser : ICommandParser
 {
-    public static ICommand ParseCommand(string input, IConfiguration configs)
+    private readonly IConfiguration _configs;
+    
+    public CommandParser(IConfiguration configs)
+    {
+        _configs = configs;
+    }
+    
+    public ICommand ParseCommand(string input)
     {
         var arguments = input.Split('"')
             .Select((element, index) => index % 2 == 0  // If even index
@@ -23,13 +30,13 @@ public static class CommandParser
                 if (parameters.Count > 2)
                     throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
                 // TODO: once saving to multiple directories is implemented, remove this restriction
-                return new ChdirCommand(parameters[0], configs);
+                return new ChdirCommand(parameters[0], _configs);
             case CommandType.AddShortcut:
                 if (parameters.Count != 2)
                     throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
-                return new AddShortcutCommand(parameters[0].ToLower(), parameters[1], configs);
+                return new AddShortcutCommand(parameters[0].ToLower(), parameters[1], _configs);
             case CommandType.Download:
-                return ProcessDownloadCommand(parameters, configs);
+                return ProcessDownloadCommand(parameters, _configs);
                 // return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
             default:
                 throw new InvalidOperationException("Could not parse input: unrecognized command");

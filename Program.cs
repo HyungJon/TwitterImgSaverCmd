@@ -1,4 +1,5 @@
-﻿using TwitterImgSaverCmd.Configurations;
+﻿using Autofac;
+using TwitterImgSaverCmd.Configurations;
 
 namespace TwitterImgSaverCmd;
 
@@ -9,18 +10,31 @@ public class Program
 {
     private static void Main(string[] args)
     {
-        var configs = new Configuration();
+        var container = RegisterServices();
+        var configs = container.Resolve<IConfiguration>();
+        var runner = container.Resolve<IRunner>();
 
         try
         {
             configs.LoadConfigs();
 
-            var runner = new Runner(configs);
             runner.Run().Wait();
         }
         finally
         {
             configs.SaveConfigs();
         }
+    }
+    
+    private static IContainer RegisterServices()
+    {
+        var builder = new ContainerBuilder();
+
+        builder.RegisterType<Runner>().As<IRunner>();
+        builder.RegisterType<CommandParser>().As<ICommandParser>();
+        builder.RegisterType<Configuration>().As<IConfiguration>();
+        
+        var container = builder.Build();
+        return container;
     }
 }

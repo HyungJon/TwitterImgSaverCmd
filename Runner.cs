@@ -1,15 +1,12 @@
-﻿using TwitterImgSaverCmd.Configurations;
-using TwitterImgSaverCmd.Commands;
+﻿namespace TwitterImgSaverCmd;
 
-namespace TwitterImgSaverCmd;
-
-public class Runner
+public class Runner : IRunner
 {
-    private readonly IConfiguration _configs;
+    private readonly ICommandParser _commandParser;
 
-    public Runner(IConfiguration configs)
+    public Runner(ICommandParser commandParser)
     {
-        _configs = configs;
+        _commandParser = commandParser;
     }
 
     public async Task Run()
@@ -19,11 +16,11 @@ public class Runner
             Console.Write("Enter URL: \n> ");
             var input = Console.ReadLine()?.Trim();
             if (string.IsNullOrEmpty(input)) continue;
-            else if (input.ToLower() == "exit") break;
+            if (input.ToLowerInvariant().Equals("exit")) break;
 
             try
             {
-                var command = ProcessInput(input);
+                var command = _commandParser.ParseCommand(input);
 
                 await command.PerformAsync();
             }
@@ -33,6 +30,4 @@ public class Runner
             }
         }
     }
-
-    private ICommand ProcessInput(string input) => CommandParser.ParseCommand(input, _configs);
 }
