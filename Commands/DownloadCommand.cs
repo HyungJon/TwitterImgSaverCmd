@@ -1,5 +1,4 @@
-﻿using TwitterImgSaverCmd.Configurations;
-using TwitterImgSaverCmd.Downloaders;
+﻿using TwitterImgSaverCmd.Downloaders;
 
 namespace TwitterImgSaverCmd.Commands;
 

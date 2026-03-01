@@ -88,15 +88,6 @@ public class CommandParser : ICommandParser
         };
     }
 
-    private static (string?, IList<string>) ParseSourcesAndShortcut(IList<string> parameters, IConfiguration configs)
-    {
-        var last = parameters.Last();
-                
-        return configs.SavePathShortcuts.TryGetValue(last, out var shortcut)
-            ? (shortcut, parameters.SkipLast(1).ToList())
-            : (null, parameters);
-    }
-    
     private enum CommandType
     {
         Download, ChangeDir, AddShortcut,

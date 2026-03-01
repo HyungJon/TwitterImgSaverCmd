@@ -1,6 +1,4 @@
-﻿using TwitterImgSaverCmd.Configurations;
-
-namespace TwitterImgSaverCmd.Commands;
+﻿namespace TwitterImgSaverCmd.Commands;
 
 /// <summary>
 /// Class to aggregate multiple commands and run them together
