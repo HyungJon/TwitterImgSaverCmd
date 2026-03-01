@@ -30,9 +30,11 @@ public class Program
     {
         var builder = new ContainerBuilder();
 
-        builder.RegisterType<Runner>().As<IRunner>();
-        builder.RegisterType<CommandParser>().As<ICommandParser>();
-        builder.RegisterType<Configuration>().As<IConfiguration>();
+        builder.RegisterType<Runner>().As<IRunner>().SingleInstance();
+        builder.RegisterType<CommandParser>().As<ICommandParser>().SingleInstance();
+        builder.RegisterType<Configuration>().As<IConfiguration>().SingleInstance();
+        builder.RegisterType<DownloaderFactory>().As<IDownloaderFactory>().SingleInstance();
+        builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
         
         var container = builder.Build();
         return container;

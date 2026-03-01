@@ -4,13 +4,15 @@ namespace TwitterImgSaverCmd.Commands;
 
 public class AddShortcutCommand : Command
 {
+    private readonly IConfiguration _configs;
     private readonly string _keyword;
     private readonly string _path;
     
-    public AddShortcutCommand(string keyword, string path, IConfiguration configs) : base(configs)
+    public AddShortcutCommand(string keyword, string path, IConfiguration configs)
     {
         _keyword = keyword;
         _path = path;
+        _configs = configs;
     }
 
     public override Task PerformAsync()
@@ -22,8 +24,8 @@ public class AddShortcutCommand : Command
         
         Console.WriteLine($"  Adding shortcut to folder {_path} as keyword {_keyword}");
         
-        Configs.SavePathShortcuts.Add(_keyword, _path);
-        Configs.SaveConfigs();
+        _configs.SavePathShortcuts.Add(_keyword, _path);
+        _configs.SaveConfigs();
         return Task.CompletedTask;
     }
 }

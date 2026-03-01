@@ -1,34 +1,21 @@
 ﻿using TwitterImgSaverCmd.Configurations;
+using TwitterImgSaverCmd.Downloaders;
 
 namespace TwitterImgSaverCmd.Commands;
 
 public class DownloadCommand : Command
 {
-    private readonly string _address;
+    private readonly IDownloader _downloader;
     private readonly string? _filename;
-    private readonly string? _savePathOverride;
 
-    public DownloadCommand(string address, IConfiguration configs, string? filename = null, string? savePathOverride = null) : base(configs)
+    public DownloadCommand(IDownloader downloader, string? filename = null)
     {
-        _address = address;
+        _downloader = downloader;
         _filename = filename;
-        _savePathOverride = savePathOverride;
     }
 
     public override async Task PerformAsync()
     {
-        if (!Uri.TryCreate(_address, UriKind.Absolute, out var uri))
-        {
-            throw new Exception("URL not valid");
-        }
-
-        var downloader = DownloaderFactory.GetDownloader(uri, _savePathOverride ?? Configs.SaveDirectoryPath);
-
-        if (downloader is null)
-        {
-            throw new Exception("Domain not supported");
-        }
-
-        await downloader.DownloadAsync(_filename);
+        await _downloader.DownloadAsync(_filename);
     }
 }

@@ -5,10 +5,12 @@ namespace TwitterImgSaverCmd;
 
 public class CommandParser : ICommandParser
 {
+    private readonly ICommandFactory _commandFactory;
     private readonly IConfiguration _configs;
     
-    public CommandParser(IConfiguration configs)
+    public CommandParser(ICommandFactory commandFactory, IConfiguration configs)
     {
+        _commandFactory = commandFactory;
         _configs = configs;
     }
     
@@ -30,13 +32,13 @@ public class CommandParser : ICommandParser
                 if (parameters.Count > 2)
                     throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
                 // TODO: once saving to multiple directories is implemented, remove this restriction
-                return new ChdirCommand(parameters[0], _configs);
+                return _commandFactory.CreateChdirCommand(parameters[0]);
             case CommandType.AddShortcut:
                 if (parameters.Count != 2)
                     throw new InvalidOperationException("Could not parse input: incorrect number of parameters");
-                return new AddShortcutCommand(parameters[0].ToLower(), parameters[1], _configs);
+                return _commandFactory.CreateAddShortcutCommand(parameters[0].ToLower(), parameters[1]);
             case CommandType.Download:
-                return ProcessDownloadCommand(parameters, _configs);
+                return ProcessDownloadCommand(parameters);
                 // return new AggregateCommand(parameters.Distinct().Select(p => new DownloadCommand(p, configs)), configs);
             default:
                 throw new InvalidOperationException("Could not parse input: unrecognized command");
@@ -61,7 +63,7 @@ public class CommandParser : ICommandParser
         return CommandType.Download; // Temporary code: just assume download
     }
 
-    private static ICommand ProcessDownloadCommand(IList<string> parameters, IConfiguration configs)
+    private ICommand ProcessDownloadCommand(IList<string> parameters)
     {
         string? filenameOverride = null;
 
@@ -71,7 +73,7 @@ public class CommandParser : ICommandParser
             parameters.RemoveAt(0);
         }
 
-        if (configs.SavePathShortcuts.TryGetValue(parameters.Last(), out var savePathOverride))
+        if (_configs.SavePathShortcuts.TryGetValue(parameters.Last(), out var savePathOverride))
         {
             parameters.RemoveAt(parameters.Count - 1);
             // consider supporting save to multiple folders at once
@@ -80,10 +82,9 @@ public class CommandParser : ICommandParser
         return parameters.Count switch
         {
             0 => throw new InvalidOperationException("No links to save provided"),
-            1 => new DownloadCommand(parameters[0], configs, filenameOverride, savePathOverride),
+            1 => _commandFactory.CreateDownloadCommand(parameters[0], filenameOverride, savePathOverride),
             _ => new AggregateCommand(
-                parameters.Select((t, i) => new DownloadCommand(t, configs, filenameOverride + '_' + (i + 1), savePathOverride)).ToList(),
-                configs)
+                parameters.Select((t, i) => _commandFactory.CreateDownloadCommand(t, filenameOverride + '_' + (i + 1), savePathOverride)).ToList())
         };
     }
 

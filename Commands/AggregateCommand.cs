@@ -10,7 +10,7 @@ public class AggregateCommand : Command
 {
     private readonly IEnumerable<ICommand> _commands;
 
-    public AggregateCommand(IEnumerable<ICommand> commands, IConfiguration configs) : base(configs)
+    public AggregateCommand(IEnumerable<ICommand> commands)
     {
         _commands = commands;
     }
