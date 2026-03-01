@@ -7,7 +7,7 @@ namespace TwitterImgSaverCmd;
 /// <summary>
 /// Class that creates instances of suitable Downloader subclass depending on input type
 /// </summary>
-public static class DownloadFactory
+public static class DownloaderFactory
 {
     private const string DomainTwitter = "www.twitter.com";
     private const string DomainTwitterBase = "twitter.com";

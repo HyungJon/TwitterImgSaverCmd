@@ -22,7 +22,7 @@ public class DownloadCommand : Command
             throw new Exception("URL not valid");
         }
 
-        var downloader = DownloadFactory.GetDownloader(uri, _savePathOverride ?? Configs.SaveDirectoryPath);
+        var downloader = DownloaderFactory.GetDownloader(uri, _savePathOverride ?? Configs.SaveDirectoryPath);
 
         if (downloader is null)
         {
