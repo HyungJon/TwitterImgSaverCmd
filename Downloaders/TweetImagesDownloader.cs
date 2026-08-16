@@ -63,7 +63,7 @@ public class TweetImagesDownloader : Downloader
     {
         foreach (var extension in CandidateExtensions)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Head, $"https://pbs.twimg.com/media/{mediaId}.{extension}");
+            using var request = new HttpRequestMessage(HttpMethod.Head, $"https://pbs.twimg.com/media/{mediaId}.{extension}:orig");
             using var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
