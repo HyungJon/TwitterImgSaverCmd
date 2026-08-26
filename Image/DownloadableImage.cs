@@ -37,7 +37,9 @@ public abstract class DownloadableImage : IDownloadableImage
         var outputPath = Path.Combine(saveDirectoryPath, outputFilename);
         if (File.Exists(outputPath))
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("  Overwriting existing file at " + outputPath);
+            Console.ResetColor();
         }
         Console.WriteLine("  Downloading from " + fileOrigSizeLink + " to " + outputPath);
 

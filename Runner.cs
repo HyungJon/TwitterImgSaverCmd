@@ -26,7 +26,11 @@ public class Runner : IRunner
             }
             catch (Exception ex)
             {
+                // TODO: add a dedicated logger that handles outputs, setting colors depending on output type message/warning/error/etc
+                // TODO: also see if the indentation can be handled by the logger, instead of by each message printer manually adding spaces
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(" Error: " + ex.Message);
+                Console.ResetColor();
             }
         }
     }
