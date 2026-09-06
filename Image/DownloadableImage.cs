@@ -1,14 +1,18 @@
-﻿namespace TwitterImgSaverCmd.Image;
+﻿using Microsoft.Extensions.Logging;
+
+namespace TwitterImgSaverCmd.Image;
 
 public abstract class DownloadableImage : IDownloadableImage
 {
     protected readonly string _fileLink;
     protected readonly string? _tweetId;
     protected readonly int? _index;
+    protected readonly ILogger<DownloadableImage> Logger;
 
-    protected DownloadableImage(Uri uri, string? tweetId = null, int? index = null)
+    protected DownloadableImage(Uri uri, ILogger<DownloadableImage> logger, string? tweetId = null, int? index = null)
     {
         _fileLink = uri.AbsoluteUri;
+        Logger = logger;
         _tweetId = tweetId;
         _index = index;
     }
@@ -38,10 +42,12 @@ public abstract class DownloadableImage : IDownloadableImage
         if (File.Exists(outputPath))
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("  Overwriting existing file at " + outputPath);
-            Console.ResetColor();
+            // Console.WriteLine("  Overwriting existing file at " + outputPath);
+            // Console.ResetColor();
+            Logger.LogWarning("Overwriting existing file at {OutputPath}", outputPath);
         }
-        Console.WriteLine("  Downloading from " + fileOrigSizeLink + " to " + outputPath);
+        // Console.WriteLine("  Downloading from " + fileOrigSizeLink + " to " + outputPath);
+        Logger.LogInformation("Downloading from {FileOrigSizeLink} to {OutputPath}", fileOrigSizeLink, outputPath);
 
         using var client = new HttpClient();
         var fileBytes = await client.GetByteArrayAsync(fileOrigSizeLink);

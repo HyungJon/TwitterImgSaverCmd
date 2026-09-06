@@ -1,4 +1,5 @@
-﻿using TwitterImgSaverCmd.Image;
+﻿using Microsoft.Extensions.Logging;
+using TwitterImgSaverCmd.Image;
 
 namespace TwitterImgSaverCmd.Downloaders;
 
@@ -7,10 +8,18 @@ namespace TwitterImgSaverCmd.Downloaders;
 /// </summary>
 public class SingleImageDownloader : Downloader
 {
-    public SingleImageDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
+    private readonly ILogger<SingleImageDownloader> _logger;
+    private readonly ILoggerFactory _loggerFactory;
+
+    public SingleImageDownloader(Uri uri, string saveDirectoryPath, ILoggerFactory loggerFactory) : base(uri, saveDirectoryPath)
     {
-        Console.WriteLine(" " + _uri + " is an image file");
+        _loggerFactory = loggerFactory;
+        _logger = _loggerFactory.CreateLogger<SingleImageDownloader>();
+
+        _logger.LogInformation("{Uri} is an image file", _uri);
+        // Console.WriteLine(" " + _uri + " is an image file");
     }
 
-    protected override Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync() => Task.FromResult(new List<IDownloadableImage> { new DirectUrlImage(_uri) } as IEnumerable<IDownloadableImage>);
+    protected override Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync() =>
+        Task.FromResult<IEnumerable<IDownloadableImage>>(new List<IDownloadableImage> { new DirectUrlImage(_uri, _loggerFactory.CreateLogger<DirectUrlImage>()) });
 }

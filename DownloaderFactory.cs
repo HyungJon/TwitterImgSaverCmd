@@ -1,4 +1,5 @@
-﻿using TwitterImgSaverCmd.Configurations;
+﻿using Microsoft.Extensions.Logging;
+using TwitterImgSaverCmd.Configurations;
 using TwitterImgSaverCmd.Downloaders;
 
 namespace TwitterImgSaverCmd;
@@ -11,10 +12,12 @@ namespace TwitterImgSaverCmd;
 public class DownloaderFactory : IDownloaderFactory
 {
     private readonly IConfiguration _configs;
+    private readonly ILoggerFactory _loggerFactory;
 
-    public DownloaderFactory(IConfiguration configs)
+    public DownloaderFactory(IConfiguration configs, ILoggerFactory loggerFactory)
     {
         _configs = configs;
+        _loggerFactory = loggerFactory;
     }
 
     private const string DomainTwitter = "www.twitter.com";
@@ -27,8 +30,10 @@ public class DownloaderFactory : IDownloaderFactory
     {
         return uri.Host switch
         {
-            DomainTwitter or DomainTwitterBase or DomainTwitterShortened or DomainTwitterX => new TweetImagesDownloader(uri, savePath ?? _configs.SaveDirectoryPath),
-            DomainTwimg => new SingleImageDownloader(uri, savePath ?? _configs.SaveDirectoryPath),
+            DomainTwitter or DomainTwitterBase or DomainTwitterShortened or DomainTwitterX =>
+                new TweetImagesDownloader(uri, savePath ?? _configs.SaveDirectoryPath, _loggerFactory),
+            DomainTwimg =>
+                new SingleImageDownloader(uri, savePath ?? _configs.SaveDirectoryPath, _loggerFactory),
             _ => null,// return a IDownloader implementer that handles invalid cases?
         };
     } 

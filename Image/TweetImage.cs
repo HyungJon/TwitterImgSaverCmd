@@ -1,11 +1,13 @@
-﻿namespace TwitterImgSaverCmd.Image;
+﻿using Microsoft.Extensions.Logging;
+
+namespace TwitterImgSaverCmd.Image;
 
 /// <summary>
 /// Represents an image as obtained from a tweet link
 /// </summary>
 public class TweetImage : DownloadableImage
 {
-    public TweetImage(Uri uri, string tweetId, int? index = null) : base(uri, tweetId, index)
+    public TweetImage(Uri uri, string tweetId, ILogger<TweetImage> logger, int? index = null) : base(uri, logger, tweetId, index)
     {
         // format:
         // https://pbs.twimg.com/media/XXXXX.jpg:large
@@ -32,10 +34,11 @@ public class TweetImage : DownloadableImage
         return baseExtension + ":orig";
     }
 
-    private static string DropOrigFromFilename(string filename)
+    private string DropOrigFromFilename(string filename)
     {
         filename = filename[..filename.LastIndexOf(':')];
-        Console.WriteLine("   Image file name: " + filename);
+        // Console.WriteLine("   Image file name: " + filename);
+        Logger.LogInformation("Image file name: {Filename}", filename);
         return filename;
     }
 }

@@ -1,4 +1,5 @@
-﻿using TwitterImgSaverCmd.Configurations;
+﻿using Microsoft.Extensions.Logging;
+using TwitterImgSaverCmd.Configurations;
 
 namespace TwitterImgSaverCmd.Commands;
 
@@ -6,11 +7,14 @@ public class ChdirCommand : Command
 {
     private readonly IConfiguration _configs;
     private readonly string _newDir;
+    private readonly ILogger<ChdirCommand> _logger;
 
-    public ChdirCommand(string newDir, IConfiguration configs)
+
+    public ChdirCommand(string newDir, IConfiguration configs, ILogger<ChdirCommand> logger)
     {
         _newDir = newDir;
         _configs = configs;
+        _logger = logger;
     }
 
     public override Task PerformAsync()
@@ -20,7 +24,8 @@ public class ChdirCommand : Command
         try
         {
             _configs.SaveDirectoryPath = Path.GetFullPath(_newDir);
-            Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
+            // Console.WriteLine(" Save folder changed to " + _configs.SaveDirectoryPath);
+            _logger.LogInformation("Save folder changed to {ConfigsSaveDirectoryPath}", _configs.SaveDirectoryPath);
         }
         catch (Exception)
         {
