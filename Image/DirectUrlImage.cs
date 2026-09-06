@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace TwitterImgSaverCmd.Image;
+﻿namespace TwitterImgSaverCmd.Image;
 
 /// <summary>
 /// Represents an image as obtained from image link
 /// </summary>
 public class DirectUrlImage : DownloadableImage
 {
-    public DirectUrlImage(Uri uri, ILogger<DirectUrlImage> logger) : base(uri, logger, null, null)
+    public DirectUrlImage(Uri uri) : base(uri, null, null)
     {
         // format:
         // https://pbs.twimg.com/media/XXXXX?format=jpg&name=360x360

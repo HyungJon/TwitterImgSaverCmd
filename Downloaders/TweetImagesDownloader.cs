@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.Extensions.Logging;
 using TwitterImgSaverCmd.Image;
 
 namespace TwitterImgSaverCmd.Downloaders;
@@ -9,28 +8,20 @@ namespace TwitterImgSaverCmd.Downloaders;
 /// </summary>
 public class TweetImagesDownloader : Downloader
 {
-    private readonly ILogger<TweetImagesDownloader> _logger;
-    private readonly ILoggerFactory _loggerFactory;
-    
     // pbs.twimg.com only ever stores tweet photos as one of these; the classic <id>.<ext>:orig
     // form 404s unless the extension matches the media's real stored format, so it doubles as a type check
     private static readonly string[] CandidateExtensions = { "jpg", "png" };
 
-    public TweetImagesDownloader(Uri uri, string saveDirectoryPath, ILoggerFactory loggerFactory) : base(uri, saveDirectoryPath)
+    public TweetImagesDownloader(Uri uri, string saveDirectoryPath) : base(uri, saveDirectoryPath)
     {
-        _loggerFactory = loggerFactory;
-        // Console.WriteLine(" " + _uri + " is a tweet");
-        _logger = _loggerFactory.CreateLogger<TweetImagesDownloader>();
-
-        _logger.LogInformation("{Uri} is a tweet", _uri);
+        Console.WriteLine(" " + _uri + " is a tweet");
     }
 
     protected override async Task<IEnumerable<IDownloadableImage>> PrepareDownloadSourcesAsync()
     {
         var imageList = new List<IDownloadableImage>();
 
-        // Console.WriteLine(" Querying tweet...");
-        _logger.LogInformation("Querying tweet...");
+        Console.WriteLine(" Querying tweet...");
 
         using var client = new HttpClient();
         var htmlDoc = new HtmlDocument();
@@ -44,8 +35,7 @@ public class TweetImagesDownloader : Downloader
         if (url is null) throw new InvalidOperationException("Failed to obtain image source");
 
         var tweetId = url[(url.LastIndexOf('/') + 1)..];
-        // Console.WriteLine("  Tweeter ID: " + tweetId);
-        _logger.LogInformation("Tweeter ID: {TweetId}", tweetId);
+        Console.WriteLine("  Tweeter ID: " + tweetId);
 
         var mediaIds = (htmlDoc.DocumentNode.SelectNodes($"//a[contains(@href, '/status/{tweetId}/photo/')]") ?? Enumerable.Empty<HtmlNode>())
             .Select(anchor => anchor.SelectSingleNode(".//img[contains(@src,'pbs.twimg.com/media/')]")) // get tweet media
@@ -61,10 +51,9 @@ public class TweetImagesDownloader : Downloader
         {
             var extension = await ResolveExtensionAsync(client, mediaIds[i]);
             var imgLink = $"https://pbs.twimg.com/media/{mediaIds[i]}.{extension}";
-            // Console.WriteLine("  Obtained the image link " + imgLink);
-            _logger.LogInformation("Obtained image link {ImgLink}", imgLink);
+            Console.WriteLine("  Obtained the image link " + imgLink);
 
-            imageList.Add(new TweetImage(new Uri(imgLink), tweetId, _loggerFactory.CreateLogger<TweetImage>(), (mediaIds.Count > 1) ? i + 1 : null));
+            imageList.Add(new TweetImage(new Uri(imgLink), tweetId, (mediaIds.Count > 1) ? i + 1 : null));
         }
 
         return imageList;

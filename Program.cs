@@ -35,7 +35,6 @@ public class Program
         builder.RegisterType<Configuration>().As<IConfiguration>().SingleInstance();
         builder.RegisterType<DownloaderFactory>().As<IDownloaderFactory>().SingleInstance();
         builder.RegisterType<CommandFactory>().As<ICommandFactory>().SingleInstance();
-        builder.RegisterModule<LoggerRegistrationModule>();
         
         var container = builder.Build();
         return container;
