@@ -73,10 +73,16 @@ public class CommandParser : ICommandParser
             parameters.RemoveAt(0);
         }
 
-        if (_configs.SavePathShortcuts.TryGetValue(parameters.Last(), out var savePathOverride))
+        var lastParameter = parameters.Last();
+
+        if (_configs.SavePathShortcuts.TryGetValue(lastParameter, out var savePathOverride))
         {
             parameters.RemoveAt(parameters.Count - 1);
-            // consider supporting save to multiple folders at once
+        }
+        else if (Directory.Exists(lastParameter))
+        {
+            parameters.RemoveAt(parameters.Count - 1);
+            savePathOverride = lastParameter;
         }
 
         return parameters.Count switch
