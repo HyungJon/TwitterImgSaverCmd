@@ -38,7 +38,7 @@ public class TweetImagesDownloader : Downloader
         Console.WriteLine("  Tweeter ID: " + tweetId);
 
         var mediaIds = (htmlDoc.DocumentNode.SelectNodes($"//a[contains(@href, '/status/{tweetId}/photo/')]") ?? Enumerable.Empty<HtmlNode>())
-            .Select(anchor => anchor.SelectSingleNode(".//img[contains(@src,'pbs.twimg.com/media/')]")) // get tweet media
+            .Select(anchor => anchor.ParentNode.SelectSingleNode(".//img[contains(@src,'pbs.twimg.com/media/')]")) // X now renders the img as a sibling of the photo anchor rather than nesting it inside, so look at the shared parent
             .Where(img => img is not null)
             .Select(img => img!.Attributes["src"].Value)
             .Select(src => src[(src.IndexOf("/media/", StringComparison.Ordinal) + "/media/".Length)..].Split('?')[0]) // make sure the media is attached images, not unrelated media (e.g. ads)
